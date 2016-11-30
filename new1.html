@@ -1,0 +1,152 @@
+
+ 
+<HTML>
+ <HEAD>
+  <TITLE> Radio & Check</TITLE>
+<meta charset="utf8">
+<link href="http://cdn.bootcss.com/twitter-bootstrap/2.0.4/css/bootstrap.min.css" rel="stylesheet">
+      
+<style>
+
+   ul[data-input-type="checkbox"],ul[data-input-type="radio"]{	
+	list-style: none;
+}
+ul[data-input-type="checkbox"]:after,ul[data-input-type="radio"]:after{	
+	content: "";
+  display: block;
+  clear: both;
+ 
+}
+ul[data-input-type="checkbox"] li,ul[data-input-type="radio"] li {
+  position: relative;
+  margin: 10px;
+  width: 150px;
+  height: 50px;
+  float: left;
+}
+ul[data-input-type="checkbox"] img,ul[data-input-type="radio"] img {
+  position: absolute;
+  margin: auto;
+  top: 0; left: 0; bottom: 0; right: 0;
+  width: 100%;
+  height:100%;
+  border-radius: 1px;
+  box-shadow: 0 0 0 4px #eee;
+  cursor: pointer; 
+}
+ul[data-input-type="checkbox"]  input[type="checkbox"],ul[data-input-type="radio"] input[type="radio"]{display:none}
+
+ul[data-input-type="checkbox"] li:before,ul[data-input-type="radio"] li:before {
+  content: "\2714";
+  display: block;
+  position: absolute;
+  margin: auto;
+  top:2px; right: 2px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  background:  #00c09e;
+  border-radius: 20px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  z-index: 10;
+  opacity: 0; 
+  cursor: pointer;
+ transition:   all .3s linear;
+}
+
+ul[data-input-type="checkbox"] li.selected:before,ul[data-input-type="radio"] li.selected:before  {
+  opacity: 1;
+}
+ 
+ul[data-input-type="checkbox"] li.selected img,ul[data-input-type="radio"] li.selected img{
+  box-shadow: 0 0 0 4px #00c09e;
+  /*light animation start*/
+  transition: all .3s linear;   
+   /*light animation end*/
+    /*heavy  animation start   ,   add  comment to make  the heavy animation no sense  
+  animation:  selected 0.3s cubic-bezier(0.250, 0.100, 0.250, 1.000); 
+       /* heavy  animation end */
+ 
+}
+
+ 
+@keyframes selected {
+  0% { border-color: #fff; }
+  50% { transform: scale(0.5); opacity: 0.8; box-shadow: 0 0 0 4px #00c09e; }
+  80%,100% { width: 100%; height: 100%; box-shadow: 0 0 0 4px #00c09e; }
+}
+
+ 
+  </style>
+
+ </HEAD>
+ 
+ <BODY>
+ <form action="">
+ <h2>选择颜色</h2>
+  <h2>单选</h2>
+  
+  
+  
+ <ul  data-input-type="radio">
+ <li > <img   src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAYAAACALL/6AAAAcElEQVQYlX1PQQ7AIAgD4wN2Wfb/l3aCimXR1QRCtbTqdT+QCUD6YFXb8SaD9Fbt0R4mbiIMkTWYIPYNkuq846WV94OqB9II5nSPRAG+gTLVh8Lj/jsQVoaDMo3UEioA+uLJZaH8X58EKpJsGGZJti+bNi1CEMhaQwAAAABJRU5ErkJggg=="> <input checked type= "radio"  value= "black"   name="color" > </li>
+ <li> <img  src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAGElEQVQokWMMeTT9PwMJgIkUxaMahrAGAPU6AuKwCofIAAAAAElFTkSuQmCC">   <input type= "radio"  value= "green"   name="color" >  </li>
+ </ul >
+ 
+ 
+  <h2>复选</h2>
+ <ul  data-input-type="checkbox">
+ <li > <img   src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAYAAACALL/6AAAAcElEQVQYlX1PQQ7AIAgD4wN2Wfb/l3aCimXR1QRCtbTqdT+QCUD6YFXb8SaD9Fbt0R4mbiIMkTWYIPYNkuq846WV94OqB9II5nSPRAG+gTLVh8Lj/jsQVoaDMo3UEioA+uLJZaH8X58EKpJsGGZJti+bNi1CEMhaQwAAAABJRU5ErkJggg=="> <input checked type= "checkbox"  value="black"  name="multicolor" ></li>
+ <li> <img  src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAGElEQVQokWMMeTT9PwMJgIkUxaMahrAGAPU6AuKwCofIAAAAAElFTkSuQmCC">   <input type= "checkbox"  value= "green"   name="multicolor" >  </li>
+ </ul > 
+ 
+ 
+ <button type="submit">提交</button>
+ </form>
+ </BODY>
+   <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+   <script>
+   
+   $.fn.serializeObject = function () {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function () {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+   
+   
+    $("ul[data-input-type=radio]").find("input[type=radio]:checked").parent("li").addClass("selected")
+	  
+    $("ul[data-input-type=radio] li").on("click",function(){	
+	$(this).addClass("selected").siblings().removeClass("selected");
+	$(this).find("input[type=radio]").prop("checked",true);	
+		/*console.log($("input[name=color]:checked").val())*/
+	})
+ 
+	$("ul[data-input-type=checkbox]").find("input[type=checkbox]:checked").parent("li").addClass("selected")
+	  $("ul[data-input-type=checkbox] li").on("click",function(){	
+		$(this).toggleClass("selected");
+		var checkprop=$(this).find("input[type=checkbox]").prop("checked");
+		oppcheckprop=checkprop==true?false:true;	
+		$(this).find("input[type=checkbox]").prop("checked",oppcheckprop);
+		/*
+		$("input[name=multicolor]:checked").each(function(){ 
+		console.log($(this).val())  
+		}) */
+		
+	})
+ 
+ $("button").on("click",function(){ console.log($("form").serializeObject())})
+  </script>
+</HTML>
