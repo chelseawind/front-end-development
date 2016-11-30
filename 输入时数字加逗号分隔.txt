@@ -1,0 +1,24 @@
+function toThousands(num) {
+    num = (num || 0).toString();
+    var result = '';
+    while (num.length > 3) {
+        result = ',' + num.slice(-3) + result;
+        num = num.slice(0, num.length - 3);
+    }
+    if (num) { result = num + result; }
+    return result;
+}
+
+function toTenThousands(num) {
+    num = (num || 0).toString();
+    var result = '';
+    while (num.length > 4) {
+        result = ',' + num.slice(-4) + result;
+        num = num.slice(0, num.length - 4);
+    }
+    if (num) { result = num + result; }
+    return result;
+}
+
+
+<input type="text" onchange="this.value=toThousands(this.value)">
