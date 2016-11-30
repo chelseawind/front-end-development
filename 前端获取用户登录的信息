@@ -1,0 +1,6 @@
+前端获取用户登录的信息：
+var userInfo;
+//这里取到的是字符串
+userInfo = sessionStorage.userInfo
+//将userInfo由字符串变成object
+userInfo = JSON.parse(userInfo);
