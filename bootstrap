@@ -1,0 +1,91 @@
+/* bootstrap框架开发问题汇总*/
+1、table中显示图标加文字
+   在column中对应的field的formatter调用函数，如：formatter:getBankNameIcon
+   function getBankIconNameIcon(value,row){
+        var bankName = '<div><img src="/webpages/assets/img/bank/'+row.BankIcon+'"href="javascript:void(0)">'+'<span style="padding-left:8px">' + row.BankName + '</span>' + "</div>"
+        return bankName;
+   }
+   
+2、selectpicker通过web api动态添加值
+function getLenderName(proId) {
+    var tempLendName = '';
+    $.ajax({
+        url: BaseUrl + "loan/contracts/lenders?projectid=" + proId,
+        type: "GET",
+        crossDomain: true,
+        dataType: "json",
+        success: function (data) {
+            $.each(data, function (i, n) {
+                tempLendName += '<option value="' + n.LenderName + '">' + n.LenderName + '</option>';
+            });
+            var obj = $("#LenderNameId");
+            obj.empty();
+            obj.append(tempLendName);
+            //更新内容刷新到相应的位置
+            obj.selectpicker('render');
+            obj.selectpicker('refresh');
+        },
+        error: function (e) {
+            console.log(2, e);
+        }
+    });
+}
+
+3、前端调用web api进行授权操作
+    首先table中显示授权按钮判断：a.当前行的UserId与用户登录Id一致,b.当前行的UserId与用户登录Id不一致;
+    在a、b中又分为checkbox的value是否为1（checked之后值即为1）;代码如下:
+    
+function switchFormatter(value, row, index) {
+    aa = '<div class="switch" data-on-label="开" data-off-label="关"><input type="checkbox" checked disabled/></div>';
+    bb = '<div class="switch" data-on-label="开" data-off-label="关"><input type="checkbox disabled"/></div>';
+    a = '<div class="switch" data-on-label="开"  data-off-label="关"><input type="checkbox" checked/></div>';
+    b = '<div class="switch" data-on-label="开"  data-off-label="关"><input type="checkbox"/></div>';
+    if (row.UserId == userInfo.UserId) {
+        if (value == "1") return aa;
+        return bb;
+    } else {
+        if (value == "1") return a;
+        return b;
+    }
+}
+    
+    其次授权操作：
+window.switchEvents = {
+  "change .switch input": function (e, value, row, index) {
+        //dic = { "1": "可用", "2": "被禁用" }
+        //console.log("之前的状态", dic[value]);      
+        if (value == 1) {
+            $.ajax({
+                url: BaseUrl + "v1/users/unauth?id=" + row.UserId,
+                type: "PUT",
+                dataType: "text",
+                crossDomain: true,
+                success: function (data) {
+                    $table.bootstrapTable("refresh");
+                    swal("取消授权成功");
+                },
+                error: function (e) {
+                    $table.bootstrapTable("refresh");
+                    console.log(2, e);
+                }
+            });
+
+        } else if (value == 2) {
+            $.ajax({
+                url: BaseUrl + "v1/users/auth?id=" + row.UserId,
+                type: "PUT",
+                dataType: "text",
+                crossDomain: true,
+                success: function (data) {
+                    $table.bootstrapTable("refresh");
+                    swal("授权成功");
+                },
+                error: function (e) {
+                    $table.bootstrapTable("refresh");
+                    console.log(2, e);
+                }
+            });
+        }
+    }
+}
+使用方法：在column中调用。
